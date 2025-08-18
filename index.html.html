@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>フィット作業依頼ポータル - Home</title>
+  <style>
+    body {
+      background-color: white;
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #28a745;
+      color: white;
+      padding: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .datetime {
+      font-size: 0.9em;
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .title-group {
+      text-align: center;
+      flex: 1;
+      margin-left: -100px;
+    }
+
+    .title-group h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+
+    .title-group h2 {
+      margin: 5px 0 0 0;
+      font-size: 1.4em;
+      color: #e0f2e9;
+    }
+
+    .layout {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #f0f0f0;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      height: calc(100vh - 80px);
+      box-sizing: border-box;
+    }
+
+    .sidebar a {
+      display: block;
+      margin-bottom: 10px;
+      color: #28a745;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .sidebar a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      flex: 1;
+      padding: 30px;
+      max-width: 800px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 500px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      padding: 8px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-content">
+    <div class="title-group">
+      <h1>FRONTIER INTERMEDIARY TECHNOLOGY INCORPORATED</h1>
+      <h2>フィット作業依頼ポータル</h2>
+    </div>
+    <div class="datetime">
+      <div id="current-date"></div>
+      <div id="current-time"></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <a href="#">Home</a>
+    <a href="#">Ongoing</a>
+    <a href="#">Finished</a>
+    <a href="#">History</a>
+  </nav>
+
+  <main>
+    <h2>Submit a New Task</h2>
+    <form>
+      <div>
+        <label for="project">Project Name</label>
+        <input type="text" id="project" name="project" required>
+      </div>
+
+      <div>
+        <label for="deadline">Deadline</label>
+        <input type="datetime-local" id="deadline" name="deadline" required>
+      </div>
+
+      <div>
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="">-- Select a Category --</option>
+          <option value="class1">Class 1</option>
+          <option value="class2">Class 2</option>
+          <option value="class3">Class 3</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="requestor">Requestor</label>
+        <input type="text" id="requestor" name="requestor" required>
+      </div>
+
+      <div>
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+      </div>
+
+      <div>
+        <label for="file-upload">Upload File</label>
+        <input type="file" id="file-upload" name="file-upload">
+      </div>
+
+      <button type="submit">Submit Task</button>
+    </form>
+  </main>
+</div>
+
+<script>
+  function updateDateTime() {
+    const now = new Date();
+    document.getElementById('current-date').textContent = now.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('current-time').textContent = now.toLocaleTimeString('ja-JP');
+  }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
+</script>
+</body>
+</html>
