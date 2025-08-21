@@ -210,10 +210,42 @@
   updateDateTime();
 
 
+  
+//This is for google sheets
+
+  <script>
+  const form = document.getElementById("task-form");
+  const responseMessage = document.getElementById("response-message");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // prevent page reload
+
+    const formData = new FormData(form);
+
+    try {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbwCUI30qAW_NjJjJdmh3OYbGMiE7OyZCLvjOWWC3B2mQT_l1pW25JSNFJ_ABZ7iL3T8/exec", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await res.text();
+      responseMessage.textContent = "✅ Task submitted successfully!";
+      responseMessage.className = "success-message";
+
+      form.reset(); // clear form after submission
+    } catch (error) {
+      responseMessage.textContent = "❌ Error submitting. Please try again.";
+      responseMessage.className = "error-message";
+    }
+  });
 </script>
 
+
+
+  
 </script>
 </body>
 </html>
+
 
 
