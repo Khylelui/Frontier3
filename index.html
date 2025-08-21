@@ -113,6 +113,18 @@
     button:hover {
       background-color: #218838;
     }
+
+    .success-message {
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
+    }
+
+    .error-message {
+      margin-top: 15px;
+      color: red;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -132,72 +144,98 @@
 <div class="layout">
 <nav class="sidebar">
   <a href="index.html">Home</a>
-  <a href="Ongoing">Ongoing</a>
+  <a href="Ongoing.html">Ongoing</a>
   <a href="Finished.html">Finished</a>
   <a href="History.html">History</a>
 </nav>
 
-  <main>
-    <h2>Submit a New Task</h2>
-    <form>
-      <div>
-        <label for="project">Project Name</label>
-        <input type="text" id="project" name="project" required>
-      </div>
+<main>
+  <h2>Submit a New Task</h2>
+  <form id="task-form">
+    <div>
+      <label for="project">Project Name</label>
+      <input type="text" id="project" name="project" required>
+    </div>
 
-      <div>
-        <label for="deadline">Deadline</label>
-        <input type="datetime-local" id="deadline" name="deadline" required>
-      </div>
+    <div>
+      <label for="deadline">Deadline</label>
+      <input type="datetime-local" id="deadline" name="deadline" required>
+    </div>
 
-      <div>
-        <label for="category">Category</label>
-        <select id="category" name="category" required>
-          <option value="">-- Select a Category --</option>
-          <option value="class1">Class 1</option>
-          <option value="class2">Class 2</option>
-          <option value="class3">Class 3</option>
-        </select>
-      </div>
+    <div>
+      <label for="category">Category</label>
+      <select id="category" name="category" required>
+        <option value="">-- Select a Category --</option>
+        <option value="Class 1">Class 1</option>
+        <option value="Class 2">Class 2</option>
+        <option value="Class 3">Class 3</option>
+      </select>
+    </div>
 
-      <div>
-        <label for="requestor">Requestor</label>
-        <input type="text" id="requestor" name="requestor" required>
-      </div>
+    <div>
+      <label for="requestor">Requestor</label>
+      <input type="text" id="requestor" name="requestor" required>
+    </div>
 
-            <div>
-        <label for="Request-to">Request to</label>
-        <input type="text" id="Request-to" name="Request-to" required>
-      </div>
+    <div>
+      <label for="incharge">Request to</label>
+      <input type="text" id="incharge" name="incharge" required>
+    </div>
 
-      <div>
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="4" required></textarea>
-      </div>
+    <div>
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="4" required></textarea>
+    </div>
 
-      <div>
-        <label for="file-upload">Upload File</label>
-        <input type="file" id="file-upload" name="file-upload">
-      </div>
+    <div>
+      <label for="file-upload">Upload File</label>
+      <input type="file" id="file-upload" name="file-upload">
+    </div>
 
-      <button type="submit">Submit Task</button>
-    </form>
-  </main>
+    <button type="submit">Submit Task</button>
+    <div id="response-message"></div>
+  </form>
+</main>
 </div>
 
 <script>
+  // Date & Time in Header
   function updateDateTime() {
     const now = new Date();
-    document.getElementById('current-date').textContent = now.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('current-date').textContent = 
+      now.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
     document.getElementById('current-time').textContent = now.toLocaleTimeString('ja-JP');
   }
   setInterval(updateDateTime, 1000);
   updateDateTime();
+
+  // Form submission to Google Apps Script Web App
+  const form = document.getElementById('task-form');
+  const responseMessage = document.getElementById('response-message');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    responseMessage.textContent = "Submitting...";
+    responseMessage.className = "";
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbwCUI30qAW_NjJjJdmh3OYbGMiE7OyZCLvjOWWC3B2mQT_l1pW25JSNFJ_ABZ7iL3T8/exec", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await response.text();
+      responseMessage.textContent = "Task submitted successfully!";
+      responseMessage.className = "success-message";
+      form.reset();
+    } catch (error) {
+      responseMessage.textContent = "Error submitting task. Please try again.";
+      responseMessage.className = "error-message";
+      console.error(error);
+    }
+  });
 </script>
 </body>
 </html>
-
-
-
-
-
