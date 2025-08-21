@@ -210,32 +210,57 @@
   updateDateTime();
 
   // Form submission to Google Apps Script Web App
-  const form = document.getElementById('task-form');
-  const responseMessage = document.getElementById('response-message');
+<form id="taskForm">
+  <label>Project Name</label>
+  <input type="text" id="project" required>
 
-  form.addEventListener('submit', async (e) => {
+  <label>Deadline</label>
+  <input type="datetime-local" id="deadline" required>
+
+  <label>Class</label>
+  <select id="category" required>
+    <option value="Class 1">Class 1</option>
+    <option value="Class 2">Class 2</option>
+    <option value="Class 3">Class 3</option>
+  </select>
+
+  <label>Requestor</label>
+  <input type="text" id="requestor" required>
+
+  <label>Message</label>
+  <textarea id="message" required></textarea>
+
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbwCUI30qAW_NjJjJdmh3OYbGMiE7OyZCLvjOWWC3B2mQT_l1pW25JSNFJ_ABZ7iL3T8/exec"; // paste your Apps Script URL here
+
+  document.getElementById("taskForm").addEventListener("submit", function(e) {
     e.preventDefault();
-    responseMessage.textContent = "Submitting...";
-    responseMessage.className = "";
 
-    const formData = new FormData(form);
+    const data = {
+      project: document.getElementById("project").value,
+      deadline: document.getElementById("deadline").value,
+      category: document.getElementById("category").value,
+      requestor: document.getElementById("requestor").value,
+      message: document.getElementById("message").value
+    };
 
-    try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbwCUI30qAW_NjJjJdmh3OYbGMiE7OyZCLvjOWWC3B2mQT_l1pW25JSNFJ_ABZ7iL3T8/exec", {
-        method: "POST",
-        body: formData
-      });
-
-      const result = await response.text();
-      responseMessage.textContent = "Task submitted successfully!";
-      responseMessage.className = "success-message";
-      form.reset();
-    } catch (error) {
-      responseMessage.textContent = "Error submitting task. Please try again.";
-      responseMessage.className = "error-message";
-      console.error(error);
-    }
+    fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then(res => res.text())
+    .then(() => {
+      alert("Submitted successfully!");
+      window.location.href = "Ongoing.html";
+    })
+    .catch(err => console.error("Error:", err));
   });
+</script>
+
 </script>
 </body>
 </html>
+
